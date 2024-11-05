@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 #import plotly.figure_factory as ff
 from sklearn.svm import SVC
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegressionCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
@@ -115,7 +115,27 @@ def main():
             st.write("Recall; ",recall_score(y_test,y_pred,labels=class_names).round(2))
             plot_metrics(metrics)
 
+    elif classifier == "Logistic Regression":
+        st.sidebar.subheader("Model parameters")
+        #C=st.sidebar.number_input("C (Regularization parameter)",0.01,10.0,step=0.01,key='C_LR')
+        max_iter=st.sidebar.slider("Maximum number of iterations",100,500,key='max_iter')
+        cv=st.sidebar.number_input("cv (Cross Validation)",2,10,step=1,key='cv')
+        n_jobs=st.sidebar.selectbox("n_jobs",(None,-1,1,-2),key='n_jobs')
+        random_state=st.sidebar.selectbox("Random State",(None,0,42,'other'),key='random_state')
+        if random_state=='other':
+            random_state=st.sidebar.number_input("custom Random State",0,2**32-1,key='custom_random_state')
+        metrics=st.sidebar.multiselect('What metrics to plot?',('Confusion Matrix','ROC Curve','Precision-Recall Curve'))
 
+        if st.sidebar.button('Classify',key='classify'):
+            st.subheader('Logistic Regression CV Results')
+            model=LogisticRegressionCV(random_state=random_state,n_jobs=n_jobs,verbose=0,max_iter=max_iter,cv=cv)
+            model.fit(x_train,y_train)
+            accuracy=model.score(x_test,y_test)
+            y_pred=model.predict(x_test)
+            st.write("Accuracy: ",accuracy,round(2))
+            st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
+            st.write("Recall; ",recall_score(y_test,y_pred,labels=class_names).round(2))
+            plot_metrics(metrics)    
     if st.sidebar.checkbox("Show raw data", False):
         st.subheader("Mushroom Data Set (Classification)")
         st.write(df)
