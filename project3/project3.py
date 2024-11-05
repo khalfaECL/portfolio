@@ -12,6 +12,8 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, roc_curve, precision_recall_curve,auc
 from sklearn.metrics import precision_score, recall_score ,average_precision_score
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 
 def main():
@@ -27,7 +29,46 @@ def main():
         for col in data.columns:
             data[col]=label.fit_transform(data[col])
         return data   
-
+    def principal_components_analysis(df):
+        st.sidebar.subheader("Principal Components Analysis")
+        n_components = st.sidebar.slider("Number of components", 1, len(df.columns),key="n_components")
+        scaler=StandardScaler()
+        dt=df#.drop(axis=1)
+        data_scaled=scaler.fit_transform(dt)
+        pca=PCA(n_components=n_components)
+        principal_components=pca.fit_transform(data_scaled)
+        explained_variance_ratio = pca.explained_variance_ratio_
+        st.write("Explained Variance Ratio:", explained_variance_ratio)
+        st.write("Principal Components:", principal_components)
+        return principal_components,explained_variance_ratio
+    
+    def plot_pca(principal_components,explain_var,fig_list):
+        st.subheader("Principal Components Analysis")
+        if 'scatter plot' in fig_list:
+            
+            fig, ax = plt.subplots()
+            ax.scatter(principal_components[:, 0], principal_components[:, 1])
+            ax.set_xlabel('Principal Component 1')
+            ax.set_ylabel('Principal Component 2')
+            ax.set_title('Principal Components Analysis (scatter)')
+            st.pyplot(fig)
+            
+        if  'bar plot' in fig_list:
+            composantes = np.arange(1, len(explain_var) + 1)
+            fig,ax=plt.subplots()
+            #plt.figure(figsize=(8, 6))
+            ax.bar(composantes, explain_var, color='skyblue')
+            #plt.bar(composantes, explain_var, color='skyblue')
+            ax.set_title('Principal Components Analysis (bar)', fontsize=14)
+            #plt.title('Principal Components Analysis (bar)', fontsize=14)
+            ax.set_xlabel('Principal Components', fontsize=12)
+            #plt.xlabel('principal components', fontsize=12)
+            #plt.ylabel('eigen values', fontsize=12)
+            ax.set_ylabel('Eigen values', fontsize=12)
+            ax.set_xticks(composantes)
+            #plt.xticks(composantes)
+            st.pyplot(fig)
+            #plt.show()
     @st.cache_data(persist=True)
     def split(df):
         y=df.type
@@ -39,7 +80,8 @@ def main():
         #fig,ax=plt.subplots()
         #ax.scatter([1,2,3],[1,2,3])
         y_pred=model.predict(x_test)
-        
+    
+            
         if 'Confusion Matrix' in metrics_list:
             #"""
             #fig=plt.figure()
@@ -92,6 +134,15 @@ def main():
             st.pyplot(fig) 
            
     df=load_data()
+    if st.sidebar.checkbox("Show raw data", False):
+        st.subheader("Mushroom Data Set (Classification)")
+        st.write(df)
+    if st.sidebar.checkbox("Show PCA", False):
+        results=principal_components_analysis(df)
+        principal_components,explained_var=results[0],results[1]
+        fig_list=st.sidebar.multiselect('What to plot?',('scatter plot','bar plot'))
+        if st.sidebar.button("Analyse"):
+            plot_pca(principal_components,explained_var,fig_list)
     x_train,x_test,y_train,y_test=split(df)
     class_names=['edible','poisonus']
     st.sidebar.subheader('Choose Classifier')
@@ -136,10 +187,27 @@ def main():
             st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
             st.write("Recall; ",recall_score(y_test,y_pred,labels=class_names).round(2))
             plot_metrics(metrics)    
-    if st.sidebar.checkbox("Show raw data", False):
-        st.subheader("Mushroom Data Set (Classification)")
-        st.write(df)
-
+    
+    elif classifier=="Random Forest":
+        st.sidebar.subheader("Model parameters")
+        n_estimators=st.sidebar.number_input("Number of trees in the forest",100,1000,step=100,key='n_estimators')
+        max_depth=st.sidebar.selectbox("Maximum depth of the tree",(None,1,2,3,4,5,6,7,8,9,10),key='max_depth')
+        min_samples_split=st.sidebar.selectbox("Minimum number of samples required to split an internal node",(2,3,4,5,6,7,8,9,10),key='min_samples_split')
+        min_samples_leaf=st.sidebar.selectbox("Minimum number of samples required to be at a leaf node",(1,2,3,4,5,6,7,8,9,10),key='min_samples_leaf')
+        random_state=st.sidebar.selectbox("Random State",(None,0,42,'other'),key='random_state')
+        if random_state=='other':
+            random_state=st.sidebar.number_input("custom Random State",0,2**32-1,key='custom_random_state')
+        metrics=st.sidebar.multiselect('What metrics to plot?',('Confusion Matrix','ROC Curve','Precision-Recall Curve'))
+        if st.sidebar.button('Classify',key='classify'):
+            st.subheader('Random Forest Results')
+            model=RandomForestClassifier(n_estimators=n_estimators,max_depth=max_depth,min_samples_split=min_samples_split,min_samples_leaf=min_samples_leaf,random_state=random_state)
+            model.fit(x_train,y_train)
+            accuracy=model.score(x_test,y_test)
+            y_pred=model.predict(x_test)
+            st.write("Accuracy: ",accuracy,round(2))
+            st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
+            st.write("Recall; ",recall_score(y_test,y_pred,labels=class_names).round(2))
+            plot_metrics(metrics)
 
 if __name__ == '__main__':
     main()
