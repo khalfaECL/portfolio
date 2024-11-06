@@ -18,6 +18,8 @@ from sklearn.preprocessing import StandardScaler
 
 def main():
     st.title('Binary Classification web App')
+    #image = Image.open("C:\Users\Lenovo\Documents\GitHub\portfolio\111.png")
+    st.image("C:\\Users\\Lenovo\\Documents\\GitHub\\portfolio\\project3\\lala.png", caption="Sunrise by the mountains")
     st.sidebar.title("Binary Classification Web App")
     st.markdown("Are you edible or poisonus? ")
     st.sidebar.markdown("Are you edible or poisonus? ")
