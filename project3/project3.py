@@ -30,7 +30,58 @@ def main():
         label=LabelEncoder()
         for col in data.columns:
             data[col]=label.fit_transform(data[col])
-        return data   
+        return data  
+    metrics_definition = {
+    'Accuracy': 'Accuracy is the proportion of correct predictions out of all predictions made. It is a measure of how well a model performs overall.',
+    'Precision': 'Precision is the proportion of true positive predictions out of all positive predictions. It measures the accuracy of positive predictions.',
+    'Recall': 'Recall, also known as sensitivity or true positive rate, is the proportion of true positive predictions out of all actual positive instances. It measures the ability of the model to identify positive instances.',
+    'F1 Score': 'The F1 score is the harmonic mean of precision and recall. It provides a balanced measure of a model\'s performance, considering both precision and recall.',
+    'ROC Curve': 'The ROC curve plots the true positive rate (recall) against the false positive rate (1 - specificity) for different classification thresholds. It helps visualize the trade-off between true positives and false positives.',
+    'Precision-Recall Curve': 'The precision-recall curve plots precision against recall for different classification thresholds. It is useful when the positive class is rare or when false positives are more important than false negatives.',
+    'Confusion Matrix': 'The confusion matrix is a table that summarizes the predictions made by a classification model. It shows the number of true positives, true negatives, false positives, and false negatives.'
+}
+    def tooltip_text(tooltip):
+        html = f"""
+    <div style="display: inline-block; position: relative;">
+      <span style="cursor: help; color: #0073e6; font-size: 18px;">🔍</span>
+      <div style="
+          visibility: hidden;
+          width: 280px;
+          background-color: #555;
+          color: #fff;
+          text-align: center;
+          border-radius: 5px;
+          padding: 5px;
+          position: absolute;
+          z-index: 1;
+          bottom: 125%; 
+          left: 50%;
+          margin-left: -80px;
+          opacity: 0;
+          transition: opacity 0.3s;">
+        {tooltip}
+        <div style="
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;">
+        </div>
+      </div>
+    </div>
+    <style>
+    div:hover > div {{
+        visibility: visible !important;
+        opacity: 1 !important;
+    }}
+    </style>
+    """
+        st.markdown(html, unsafe_allow_html=True)
+
+
+     
     def principal_components_analysis(df):
         st.sidebar.subheader("Principal Components Analysis")
         n_components = st.sidebar.slider("Number of components", 1, len(df.columns),key="n_components")
@@ -85,6 +136,7 @@ def main():
     
             
         if 'Confusion Matrix' in metrics_list:
+            
             #"""
             #fig=plt.figure()
             #st.subheader('Confusion Matrix')
@@ -97,6 +149,7 @@ def main():
             ax.set_ylabel("True labels")
             ax.set_title("Confusion Matrix")
             st.subheader('Confusion Matrix')
+            tooltip_text(metrics_definition['Confusion Matrix'])
             st.pyplot(fig)    
         if 'ROC Curve' in metrics_list:
             #"""
@@ -119,6 +172,7 @@ def main():
             ax.legend(loc="lower right")
         
             st.subheader('ROC Curve')
+            tooltip_text(metrics_definition['ROC Curve'])
             st.pyplot(fig)
                     
         if 'Precision-Recall Curve' in metrics_list:
@@ -133,6 +187,7 @@ def main():
             ax.legend(loc="lower left")
             
             st.subheader('Precision-Recall Curve')
+            tooltip_text(metrics_definition['Precision-Recall Curve'])
             st.pyplot(fig) 
            
     df=load_data()
