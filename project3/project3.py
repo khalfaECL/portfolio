@@ -21,12 +21,12 @@ def main():
     #image = Image.open("C:\Users\Lenovo\Documents\GitHub\portfolio\111.png")
     st.image("C:\\Users\\Lenovo\\Documents\\GitHub\\portfolio\\project3\\lala.png", caption="Sunrise by the mountains")
     st.sidebar.title("Binary Classification Web App")
-    st.markdown("Are you edible or poisonus? ")
-    st.sidebar.markdown("Are you edible or poisonus? ")
+    st.markdown("colon cancer prediction? ")
+    st.sidebar.markdown("Colon cancer prediction? ")
     
     @st.cache_data(persist=True)
     def load_data():
-        data=pd.read_csv('E:\edu\ecc-materials\/2A\personal_projects\data\project3\mushrooms.csv')
+        data=pd.read_csv('C:\\Users\\Lenovo\\Documents\\GitHub\\portfolio\\project3\\colon_cancer.csv',sep=';')
         label=LabelEncoder()
         for col in data.columns:
             data[col]=label.fit_transform(data[col])
@@ -124,8 +124,8 @@ def main():
             #plt.show()
     @st.cache_data(persist=True)
     def split(df):
-        y=df.type
-        x=df.drop(columns=['type'])
+        y=df['tissue_status']
+        x=df.drop(columns=['tissue_status','id_sample'])
         x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3,random_state=0)
         return x_train,x_test,y_train,y_test
     
@@ -201,7 +201,7 @@ def main():
         if st.sidebar.button("Analyse"):
             plot_pca(principal_components,explained_var,fig_list)
     x_train,x_test,y_train,y_test=split(df)
-    class_names=['edible','poisonus']
+    class_names=['0','1']
     st.sidebar.subheader('Choose Classifier')
     classifier=st.sidebar.selectbox("Classifier",("Support Vector Machine (SVM)","Logistic Regression","Random Forest"))
     if classifier == "Support Vector Machine (SVM)":
