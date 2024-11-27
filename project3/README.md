@@ -1,5 +1,8 @@
 # project3
 Use<br>
+Colon cancer is a significant health concern worldwide. Early detection and diagnosis are crucial for improving patient outcomes. This project explores the potential of machine learning to aid in the early identification of colon cancer using patient data and advanced algorithms.<br>
+ By employing machine learning techniques such as logistic regression and SVM, I aim to effectively classify patients using a minimal set of features. <br>
+ My primary objective is to optimize the model’s performance while reducing computational costs, ultimately creating a more efficient and practical tool for early disease detection. <br>
 "pip install streamlit" in terminal to install streamlit tools<br>
 then use<br>
 "streamlit run project3.py"<br>
