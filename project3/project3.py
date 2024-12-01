@@ -96,18 +96,25 @@ def main():
         explained_variance_ratio = pca.explained_variance_ratio_
         st.write("Explained Variance Ratio:", explained_variance_ratio)
         st.write("Principal Components:", principal_components)
-        return principal_components,explained_variance_ratio
+        return principal_components,explained_variance_ratio,n_components
     
-    def plot_pca(principal_components,explain_var,fig_list):
+    def plot_pca(principal_components,explain_var,fig_list,n_components):
         st.subheader("Principal Components Analysis")
+        status_df = df[['tissue_status']]
+        princ_comp = pd.concat([pd.DataFrame(principal_components, columns=['PC{}'.format(i + 1) for i in range(n_components)]), status_df], axis=1)
         if 'scatter plot' in fig_list:
             
-            fig, ax = plt.subplots()
-            ax.scatter(principal_components[:, 0], principal_components[:, 1])
-            ax.set_xlabel('Principal Component 1')
-            ax.set_ylabel('Principal Component 2')
-            ax.set_title('Principal Components Analysis (scatter)')
-            st.pyplot(fig)
+#plt.show() 
+            #fig=plt.figure()
+            #fig, ax = plt.subplots()
+            #ax.set_title('Principal Components Analysis (scatter)')
+            sns.pairplot(princ_comp, hue="tissue_status", palette={'tumoral': 'red', 'normal': 'blue'})
+            
+            #ax.scatter(principal_components[:, 0], principal_components[:, 1])
+            #ax.set_xlabel('Principal Component 1')
+            #ax.set_ylabel('Principal Component 2')
+            
+            st.pyplot(plt)
             
         if  'bar plot' in fig_list:
             composantes = np.arange(1, len(explain_var) + 1)
@@ -145,7 +152,7 @@ def main():
             #st.subheader('Confusion Matrix')
             #confusion_matrix(y_test,y_pred)
             #st.pyplot(fig)"""
-            cm = confusion_matrix(y_test, y_pred)
+            cm = confusion_matrix(y_test, y_pred,pos_label='tumoral')
             fig, ax = plt.subplots()
             sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False, ax=ax)
             ax.set_xlabel("Predicted labels")
@@ -161,7 +168,7 @@ def main():
             #confusion_matrix(y_test,y_pred)
             #st.pyplot(fig)
             #"""
-            fpr, tpr, _ = roc_curve(y_test, y_pred)
+            fpr, tpr, thresholds = roc_curve(y_test, y_pred,pos_label='tumoral')
             roc_auc = auc(fpr, tpr)
             
             fig, ax = plt.subplots()
@@ -179,7 +186,7 @@ def main():
             st.pyplot(fig)
                     
         if 'Precision-Recall Curve' in metrics_list:
-            precision, recall, _ = precision_recall_curve(y_test, y_pred)
+            precision, recall,thresholds= precision_recall_curve(y_test, y_pred,pos_label='tumoral')
             avg_precision = average_precision_score(y_test, y_pred)
             
             fig, ax = plt.subplots()
@@ -199,12 +206,12 @@ def main():
         st.write(df)
     if st.sidebar.checkbox("Show PCA", False):
         results=principal_components_analysis(df)
-        principal_components,explained_var=results[0],results[1]
+        principal_components,explained_var,n_components=results[0],results[1],results[2]
         fig_list=st.sidebar.multiselect('What to plot?',('scatter plot','bar plot'))
         if st.sidebar.button("Analyse"):
-            plot_pca(principal_components,explained_var,fig_list)
+            plot_pca(principal_components,explained_var,fig_list,n_components)
     x_train,x_test,y_train,y_test=split(df)
-    class_names=['0','1']
+    class_names=['tumoral','normal']
     st.sidebar.subheader('Choose Classifier')
     classifier=st.sidebar.selectbox("Classifier",("Support Vector Machine (SVM)","Logistic Regression","Random Forest"))
     if classifier == "Support Vector Machine (SVM)":
@@ -220,6 +227,7 @@ def main():
             model=SVC(C=C,kernel=kernel,gamma=gamma)
             model.fit(x_train,y_train)
             accuracy=model.score(x_test,y_test)
+            #y_pred=model.predict_proba(x_test)[:,1]
             y_pred=model.predict(x_test)
             st.write("Accuracy: ",accuracy,round(2))
             st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
@@ -242,7 +250,8 @@ def main():
             model=LogisticRegressionCV(random_state=random_state,n_jobs=n_jobs,verbose=0,max_iter=max_iter,cv=cv)
             model.fit(x_train,y_train)
             accuracy=model.score(x_test,y_test)
-            y_pred=model.predict(x_test)
+            y_pred=model.predict_proba(x_test)[:,1]
+            #y_pred=model.predict(x_test)
             st.write("Accuracy: ",accuracy,round(2))
             st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
             st.write("Recall; ",recall_score(y_test,y_pred,labels=class_names).round(2))
@@ -263,7 +272,8 @@ def main():
             model=RandomForestClassifier(n_estimators=n_estimators,max_depth=max_depth,min_samples_split=min_samples_split,min_samples_leaf=min_samples_leaf,random_state=random_state)
             model.fit(x_train,y_train)
             accuracy=model.score(x_test,y_test)
-            y_pred=model.predict(x_test)
+            y_pred=model.predict_proba(x_test)[:,1]
+            #y_pred=model.predict(x_test)
             st.write("Accuracy: ",accuracy,round(2))
             st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
             st.write("Recall; ",recall_score(y_test,y_pred,labels=class_names).round(2))
