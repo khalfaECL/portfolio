@@ -5,5 +5,5 @@ The website application is easy to interact with ,comprehensable for new clients
 
 I used Flask rendering tools to plot Netflix closing price over time, as I requested using requests packages netflix secondary accessible data field<br>
 WELCOME TO THE WEBSITE <br>
-Feel free to browse however you like to experience machine learning model (capabalities to predict closing price time over time<br>
+Feel free to browse however you like to experience machine learning model (capabalities to predict closing price time over time)<br>
 
