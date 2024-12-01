@@ -17,20 +17,23 @@ from sklearn.preprocessing import StandardScaler
 
 
 def main():
-    st.title('Binary Classification web App')
+    st.title('Binary Classification web App \n developped by KHALFA Youssef')
+    st.write('Colon cancer is a significant health concern worldwide. Early detection and diagnosis are crucial for improving patient outcomes.')
+    st.write('This project explores the potential of machine learning to aid in the early identification of colon cancer using patient data and advanced algorithms.')
     #image = Image.open("C:\Users\Lenovo\Documents\GitHub\portfolio\111.png")
-    st.image("C:\\Users\\Lenovo\\Documents\\GitHub\\portfolio\\project3\\lala.png", caption="Sunrise by the mountains")
+    st.image("C:\\Users\\Lenovo\\Documents\\GitHub\\portfolio\\project3\\lala.png", caption="Data analyst in your service")
     st.sidebar.title("Binary Classification Web App")
-    st.markdown("colon cancer prediction? ")
-    st.sidebar.markdown("Colon cancer prediction? ")
+    #st.markdown("colon cancer prediction")
+    st.sidebar.markdown("Colon cancer prediction ")
     
     @st.cache_data(persist=True)
     def load_data():
         data=pd.read_csv('C:\\Users\\Lenovo\\Documents\\GitHub\\portfolio\\project3\\colon_cancer.csv',sep=';')
-        label=LabelEncoder()
-        for col in data.columns:
-            data[col]=label.fit_transform(data[col])
-        return data  
+        return data
+        #label=LabelEncoder()
+        #for col in data.columns:
+         #   data[col]=label.fit_transform(data[col])
+        #return data  
     metrics_definition = {
     'Accuracy': 'Accuracy is the proportion of correct predictions out of all predictions made. It is a measure of how well a model performs overall.',
     'Precision': 'Precision is the proportion of true positive predictions out of all positive predictions. It measures the accuracy of positive predictions.',
@@ -86,7 +89,7 @@ def main():
         st.sidebar.subheader("Principal Components Analysis")
         n_components = st.sidebar.slider("Number of components", 1, len(df.columns),key="n_components")
         scaler=StandardScaler()
-        dt=df#.drop(axis=1)
+        dt=df.drop(['id_sample','tissue_status'],axis=1)
         data_scaled=scaler.fit_transform(dt)
         pca=PCA(n_components=n_components)
         principal_components=pca.fit_transform(data_scaled)
@@ -192,7 +195,7 @@ def main():
            
     df=load_data()
     if st.sidebar.checkbox("Show raw data", False):
-        st.subheader("Mushroom Data Set (Classification)")
+        st.subheader("Genes feautures Data Set")
         st.write(df)
     if st.sidebar.checkbox("Show PCA", False):
         results=principal_components_analysis(df)
