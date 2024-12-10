@@ -138,7 +138,7 @@ def main():
         x=df.drop(columns=['tissue_status','id_sample'])
         x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3,random_state=0)
         return x_train,x_test,y_train,y_test
-    
+        
     def plot_metrics(metrics_list):
         #fig,ax=plt.subplots()
         #ax.scatter([1,2,3],[1,2,3])
@@ -152,7 +152,7 @@ def main():
             #st.subheader('Confusion Matrix')
             #confusion_matrix(y_test,y_pred)
             #st.pyplot(fig)"""
-            cm = confusion_matrix(y_test, y_pred,pos_label='tumoral')
+            cm = confusion_matrix(y_test, y_pred,labels=model.classes_ ,pos_label='tumoral',average='binary')
             fig, ax = plt.subplots()
             sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False, ax=ax)
             ax.set_xlabel("Predicted labels")
@@ -168,7 +168,7 @@ def main():
             #confusion_matrix(y_test,y_pred)
             #st.pyplot(fig)
             #"""
-            fpr, tpr, thresholds = roc_curve(y_test, y_pred,pos_label='tumoral')
+            fpr, tpr, _ = roc_curve(y_test, y_pred,labels=model.classes_ ,pos_label='tumoral',average='binary')
             roc_auc = auc(fpr, tpr)
             
             fig, ax = plt.subplots()
@@ -186,7 +186,7 @@ def main():
             st.pyplot(fig)
                     
         if 'Precision-Recall Curve' in metrics_list:
-            precision, recall,thresholds= precision_recall_curve(y_test, y_pred,pos_label='tumoral')
+            precision, recall,_= precision_recall_curve(y_test, y_pred,labels=model.classes_ ,pos_label='tumoral',average='binary')
             avg_precision = average_precision_score(y_test, y_pred)
             
             fig, ax = plt.subplots()
@@ -211,27 +211,31 @@ def main():
         if st.sidebar.button("Analyse"):
             plot_pca(principal_components,explained_var,fig_list,n_components)
     x_train,x_test,y_train,y_test=split(df)
-    class_names=['tumoral','normal']
+    class_names=["tumoral","normal"]
     st.sidebar.subheader('Choose Classifier')
     classifier=st.sidebar.selectbox("Classifier",("Support Vector Machine (SVM)","Logistic Regression","Random Forest"))
+    scaler = StandardScaler()
+    scaler.fit(x_train)
+    x_train_scaled = scaler.transform(x_train)
+    x_test_scaled = scaler.transform(x_test)
     if classifier == "Support Vector Machine (SVM)":
         st.sidebar.subheader("Model Hyperparameters")
         C=st.sidebar.number_input("C (Regularization parameter)",0.01,10.0,step=0.01,key='C')
-        kernel=st.sidebar.radio("kernel",("rbf","linear"),key='kernel')
+        kernel=st.sidebar.radio("kernel",("rbf","linear","sigmoid"),key='kernel')
         gamma=st.sidebar.radio("Gamma (Kernel Coefficient)",("scale","auto"),key="gamma")
 
         metrics=st.sidebar.multiselect('What metrics to plot?',('Confusion Matrix','ROC Curve','Precision-Recall Curve'))
 
         if st.sidebar.button('Classify',key='classify'):
             st.subheader('Support Vector Machine (SVM) Results')
-            model=SVC(C=C,kernel=kernel,gamma=gamma)
-            model.fit(x_train,y_train)
-            accuracy=model.score(x_test,y_test)
+            model=SVC(kernel=kernel, random_state=42, probability=True,gamma=gamma,C=C)
+            model.fit(x_train_scaled,y_train)
+            accuracy=model.score(x_test_scaled,y_test)
             #y_pred=model.predict_proba(x_test)[:,1]
-            y_pred=model.predict(x_test)
+            y_pred=model.predict(x_test_scaled)
             st.write("Accuracy: ",accuracy,round(2))
-            st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
-            st.write("Recall; ",recall_score(y_test,y_pred,labels=class_names).round(2))
+            st.write("Precision ", precision_score(y_test,y_pred,labels=model.classes_).round(2))
+            st.write("Recall; ",recall_score(y_test,y_pred,labels=model.classes_).round(2))
             plot_metrics(metrics)
 
     elif classifier == "Logistic Regression":
@@ -248,9 +252,9 @@ def main():
         if st.sidebar.button('Classify',key='classify'):
             st.subheader('Logistic Regression CV Results')
             model=LogisticRegressionCV(random_state=random_state,n_jobs=n_jobs,verbose=0,max_iter=max_iter,cv=cv)
-            model.fit(x_train,y_train)
-            accuracy=model.score(x_test,y_test)
-            y_pred=model.predict_proba(x_test)[:,1]
+            model.fit(x_train_scaled,y_train)
+            accuracy=model.score(x_test_scaled,y_test)
+            y_pred=model.predict_proba(x_test_scaled)[:,1]
             #y_pred=model.predict(x_test)
             st.write("Accuracy: ",accuracy,round(2))
             st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
@@ -270,9 +274,9 @@ def main():
         if st.sidebar.button('Classify',key='classify'):
             st.subheader('Random Forest Results')
             model=RandomForestClassifier(n_estimators=n_estimators,max_depth=max_depth,min_samples_split=min_samples_split,min_samples_leaf=min_samples_leaf,random_state=random_state)
-            model.fit(x_train,y_train)
-            accuracy=model.score(x_test,y_test)
-            y_pred=model.predict_proba(x_test)[:,1]
+            model.fit(x_train_scaled,y_train)
+            accuracy=model.score(x_test_scaled,y_test)
+            y_pred=model.predict_proba(x_test_scaled)[:,1]
             #y_pred=model.predict(x_test)
             st.write("Accuracy: ",accuracy,round(2))
             st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
