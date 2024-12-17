@@ -41,7 +41,9 @@ def main():
     'F1 Score': 'The F1 score is the harmonic mean of precision and recall. It provides a balanced measure of a model\'s performance, considering both precision and recall.',
     'ROC Curve': 'The ROC curve plots the true positive rate (recall) against the false positive rate (1 - specificity) for different classification thresholds. It helps visualize the trade-off between true positives and false positives.',
     'Precision-Recall Curve': 'The precision-recall curve plots precision against recall for different classification thresholds. It is useful when the positive class is rare or when false positives are more important than false negatives.',
-    'Confusion Matrix': 'The confusion matrix is a table that summarizes the predictions made by a classification model. It shows the number of true positives, true negatives, false positives, and false negatives.'
+    'Confusion Matrix': 'The confusion matrix is a table that summarizes the predictions made by a classification model. It shows the number of true positives, true negatives, false positives, and false negatives.',
+    'Explained Variance': 'Explained variance is a measure of how much variance in the target variable is explained by the model. It is calculated as the ratio of the variance explained by the model to the total variance in the target variable.',
+    'Principal Component Analysis (PCA)': 'PCA is a dimensionality reduction technique that transforms high-dimensional data into a lower-dimensional space while preserving the most important information. It helps in visualizing and understanding complex data relationships.',
 }
     def tooltip_text(tooltip):
         html = f"""
@@ -94,7 +96,9 @@ def main():
         pca=PCA(n_components=n_components)
         principal_components=pca.fit_transform(data_scaled)
         explained_variance_ratio = pca.explained_variance_ratio_
+        tooltip_text(metrics_definition['Explained Variance'])
         st.write("Explained Variance Ratio:", explained_variance_ratio)
+        tooltip_text(metrics_definition['Principal Component Analysis (PCA)'])
         st.write("Principal Components:", principal_components)
         return principal_components,explained_variance_ratio,n_components
     
@@ -143,7 +147,7 @@ def main():
     def plot_metrics(metrics_list):
         #fig,ax=plt.subplots()
         #ax.scatter([1,2,3],[1,2,3])
-        y_pred=model.predict(x_test)
+        #y_pred=model.predict(x_test)
     
             
         if 'Confusion Matrix' in metrics_list:
@@ -257,7 +261,7 @@ def main():
             model.fit(x_train_scaled,y_train)
             accuracy=model.score(x_test_scaled,y_test)
             #y_pred=model.predict_proba(x_test_scaled)[:,1]
-            y_pred=model.predict(x_test)
+            y_pred=model.predict(x_test_scaled)
             st.write("Accuracy: ",accuracy,round(2))
             st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
             st.write("Recall; ",recall_score(y_test,y_pred,labels=class_names).round(2))
@@ -279,7 +283,7 @@ def main():
             model.fit(x_train_scaled,y_train)
             accuracy=model.score(x_test_scaled,y_test)
             #y_pred=model.predict_proba(x_test_scaled)[:,1]
-            y_pred=model.predict(x_test)
+            y_pred=model.predict(x_test_scaled)
             st.write("Accuracy: ",accuracy,round(2))
             st.write("Precision ", precision_score(y_test,y_pred,labels=class_names).round(2))
             st.write("Recall; ",recall_score(y_test,y_pred,labels=class_names).round(2))
