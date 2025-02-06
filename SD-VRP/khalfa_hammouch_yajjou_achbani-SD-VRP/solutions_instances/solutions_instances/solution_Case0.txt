@@ -1,0 +1,5 @@
+Route 1: 0 – 1 (4) – 2 (5) – 3 (1) – 0
+Route 2: 0 – 3 (5) – 0
+Total cost: 37
+Number of deliveries: 4
+Loads: 10 5

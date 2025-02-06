@@ -1,0 +1,80 @@
+import scrapy
+import json
+import requests
+import pandas as pd
+import matplotlib.pyplot as plt
+from flask import Flask, render_template, jsonify
+from scrapy.crawler import CrawlerProcess
+
+app = Flask(__name__)
+
+# Scrapy Spider to scrape financial news from Investing.com
+class InvestingNewsSpider(scrapy.Spider):
+    name = "investing_news"
+    start_urls = ["https://www.investing.com/news/stock-market-news"]
+
+    def parse(self, response):
+        for article in response.css("div.largeTitle article.js-article-item"):
+            yield {
+                'title': article.css("a.title::text").get(),
+                'link': response.urljoin(article.css("a.title::attr(href)").get()),
+                'summary': article.css("p::text").get(),
+            }
+
+# Function to fetch stock market data from Polygon.io
+def fetch_stock_data(ticker, api_key):
+    url = f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/2023-01-01/2024-01-01?apiKey={api_key}"
+    response = requests.get(url)
+    data = response.json()
+    return data["results"] if "results" in data else []
+
+# Data Analysis and Visualization
+def analyze_stock_data(stock_data, ticker):
+    df = pd.DataFrame(stock_data)
+    df['t'] = pd.to_datetime(df['t'], unit='ms')
+    df.set_index('t', inplace=True)
+    
+    # Plot stock prices
+    plt.figure(figsize=(10, 5))
+    plt.plot(df.index, df['c'], label='Closing Price')
+    plt.xlabel('Date')
+    plt.ylabel('Price (USD)')
+    plt.title(f'Stock Price Trends for {ticker}')
+    plt.legend()
+    plt.savefig("static/plot.png")
+    
+    return df.to_dict()
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/stock/<ticker>')
+def get_stock_data(ticker):
+    API_KEY = "your_polygon_api_key"  # Replace with your Polygon.io API key
+    stock_data = fetch_stock_data(ticker, API_KEY)
+    
+    if stock_data:
+        data = analyze_stock_data(stock_data, ticker)
+        return jsonify({"data": data, "plot": "static/plot.png"})
+    else:
+        return jsonify({"error": "No stock data found."})
+
+@app.route('/news')
+def get_investing_news():
+    process = CrawlerProcess(settings={
+        "FEEDS": {
+            "news.json": {"format": "json"},
+        },
+    })
+
+    process.crawl(InvestingNewsSpider)
+    process.start()  # Runs the spider
+
+    with open("news.json", "r") as f:
+        news_data = json.load(f)
+    
+    return jsonify(news_data)
+
+if __name__ == "__main__":
+    app.run(debug=True)
