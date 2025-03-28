@@ -21,14 +21,14 @@ def main():
     st.write('Colon cancer is a significant health concern worldwide. Early detection and diagnosis are crucial for improving patient outcomes.')
     st.write('This project explores the potential of machine learning to aid in the early identification of colon cancer using patient data and advanced algorithms.')
     #image = Image.open("C:\Users\Lenovo\Documents\GitHub\portfolio\111.png")
-    st.image("C:\\Users\\Lenovo\\Documents\\GitHub\\portfolio\\project3\\lala.png", caption="Data analyst in your service")
+    st.image("C:\\Users\\Lenovo\\Documents\\GitHub\\portfolio\\ML fine-tuning\\lala.png", caption="Data analyst in your service")
     st.sidebar.title("Binary Classification Web App")
     #st.markdown("colon cancer prediction")
     st.sidebar.markdown("Colon cancer prediction ")
     
     @st.cache_data(persist=True)
     def load_data():
-        data=pd.read_csv('C:\\Users\\Lenovo\\Documents\\GitHub\\portfolio\\project3\\colon_cancer.csv',sep=';')
+        data=pd.read_csv('C:\\Users\\Lenovo\\Documents\\GitHub\\portfolio\\ML fine-tuning\\colon_cancer.csv',sep=';')
         return data
         #label=LabelEncoder()
         #for col in data.columns:
