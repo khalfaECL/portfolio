@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Interview Chat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Interview Simulation</h2>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="field-selection" id="selection-buttons">
+            <button class="field-button" data-field="Industrial">Industrial Engineering</button>
+            <button class="field-button" data-field="Software">Software Engineering</button>
+            <button class="field-button" data-field="Data">Data Analyst</button>
+        </div>
+        <div class="level-selection" id="level-buttons" style="display:none;">
+            <button class="level-button" data-level="Entry">Entry Level</button>
+            <button class="level-button" data-level="Intermediate">Intermediate</button>
+            <button class="level-button" data-level="Advanced">Advanced</button>
+        </div>
+        <div class="chat-input" id="chat-input" style="display:none;">
+            <button id="record-button">Record Response</button>
+            <input type="text" id="message-input" placeholder="Type your answer...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
