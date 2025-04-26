@@ -2,7 +2,7 @@
 
 **🚀 Votre solution clé en main pour l'automatisation pharmaceutique !**  
 Un robot intelligent qui navigue, collecte et range comme un pro – parce que la logistique médicale mérite un upgrade futuriste.  
-
+https://centralecasablanca-my.sharepoint.com/:f:/g/personal/youssef_khalfa_centrale-casablanca_ma/Eopy4Of2L_ZEiNZNrCX20PkBkyLtRNMwlFCJnXyiU6-bQg?e=QRXh1q
 ---
 
 ## ✨ Features Qui Dépoussièrent la Logistique  
