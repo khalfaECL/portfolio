@@ -60,4 +60,11 @@ _____________________________________________________________________
 🔐 Secure endpoints (authentication)  
 🌎 Deploy online using Render or AWS Lightsail  
 
+# 📈 Model Performance
+📊 Classification Report
 
+Metric | Class 0 | Class 1 | Macro Avg | Weighted Avg
+Precision | 0.96 | 0.82 | 0.89 | 0.91
+Recall | 0.87 | 0.95 | 0.91 | 0.90
+F1-Score | 0.92 | 0.88 | 0.90 | 0.90
+Support | 31 | 19 | 50 | 50
