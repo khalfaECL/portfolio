@@ -1,9 +1,13 @@
-#PROJECT4<br>
-In this project I developped a website where I used "webscraping" tools to load open source ,statistical data in relation to E-Commerce activities 
-thanks to yahoo finance API and BeautifulSoup packages<br>
-The website application is easy to interact with ,comprehensable for new clients and visually appealing.<br>
+# Netflix Stock Data Scraper and Viewer (Flask + Selenium)
 
-I used Flask rendering tools to plot Netflix closing price over time, as I requested using requests packages netflix secondary accessible data field<br>
-WELCOME TO THE WEBSITE <br>
-Feel free to browse however you like to experience machine learning model (capabalities to predict closing price time over time)<br>
+This project scrapes the historical stock data for **Netflix (NFLX)** from Yahoo Finance using **Selenium**, displays it in a webpage with a plot, and **saves the data into an Excel file**.
 
+---
+
+## 🚀 Features
+
+- Scrape real-time dynamic data from Yahoo Finance.
+- Visualize closing prices over time (matplotlib plot).
+- Export the cleaned data to `netflix_data.xlsx` for further machine learning usage.
+- Simple Flask app to view table and graph.
+- Headless (no browser window) scraping using Selenium.

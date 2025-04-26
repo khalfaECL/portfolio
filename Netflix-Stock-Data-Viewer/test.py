@@ -8,10 +8,9 @@ import base64
 import yfinance as yf
 app = Flask(__name__)
 
-# Web scraping function
 def scrape_netflix_data():
-    #url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0220EN-SkillsNetwork/labs/project/netflix_data_webpage.html"
-    url="https://finance.yahoo.com/quote/NFLX/history/"
+    url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0220EN-SkillsNetwork/labs/project/netflix_data_webpage.html"
+    #url="https://finance.yahoo.com/quote/NFLX/history/"
     #url="C:/Users/Lenovo/Documents/GitHub/portfolio/Netflix-Stock-Data-Viewer/Netflix_Yahoo_Finance.html"
     data = requests.get(url).text
     soup = BeautifulSoup(data, 'html.parser')
@@ -30,21 +29,20 @@ def scrape_netflix_data():
             ignore_index=True
         )
 
-    # Convert columns to appropriate data types
+    
     netflix_data["Date"] = pd.to_datetime(netflix_data["Date"])
     netflix_data["Open"] = pd.to_numeric(netflix_data["Open"].str.replace(',', ''), errors='coerce')
     netflix_data["High"] = pd.to_numeric(netflix_data["High"].str.replace(',', ''), errors='coerce')
     netflix_data["Low"] = pd.to_numeric(netflix_data["Low"].str.replace(',', ''), errors='coerce')
     netflix_data["Close"] = pd.to_numeric(netflix_data["Close"].str.replace(',', ''), errors='coerce')
     netflix_data["Volume"] = pd.to_numeric(netflix_data["Volume"].str.replace(',', ''), errors='coerce')
-
+    netflix_data.to_excel("C:/Users/Lenovo/Documents/GitHub/portfolio/Netflix-Stock-Data-Viewer/netflix_data.xlsx", index=False)
     return netflix_data
 
-# Route for the main page
+
 @app.route("/")
 def index():
     netflix_data = scrape_netflix_data()
-    # Generate the plot as a base64 image
     img = io.BytesIO()
     plt.figure(figsize=(10, 5))
     plt.plot(netflix_data["Date"], netflix_data["Close"], label='Close Price')
