@@ -38,11 +38,11 @@ Later, this dataset can be **used to train Machine Learning models** for stock p
 
 # 🚀 Quick Start
 
-git clone https://github.com/your-username/netflix-stock-ml.git
-cd netflix-stock-ml
+git clone https://github.com/your-username/netflix-stock-ml.git|
+cd netflix-stock-ml|
 
 
-📊 Features
+# 📊 Features
 ____________________________________________________________________
 ✅ Scrape latest Netflix historical stock data
 ✅ Save data automatically to netflix_data.xlsx
@@ -52,7 +52,7 @@ ____________________________________________________________________
 
 
 
-✨ Future Improvements
+# ✨ Future Improvements
 _____________________________________________________________________
 📈 Train Machine Learning models (Random Forest, LSTM) on the stock data
 📊 Build an interactive dashboard using Plotly Dash or Streamlit
