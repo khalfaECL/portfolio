@@ -22,3 +22,4 @@ Une expérience immersive qui transforme un livre classique en vitrine technolog
 ---
 
 🔗 *Demo vidéo & code source disponibles. Prêt à transformer votre support pédagogique ?*  
+https://centralecasablanca-my.sharepoint.com/:f:/g/personal/youssef_khalfa_centrale-casablanca_ma/EjTuYp4LBoxEuQ6ixVZTfV8BnE6OdBYZM5LaTHwFU3Oo3A?e=dP4wyQ
