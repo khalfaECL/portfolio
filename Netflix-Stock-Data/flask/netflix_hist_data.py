@@ -59,7 +59,7 @@ def scrape_netflix_data():
     netflix_data["Volume"] = pd.to_numeric(netflix_data["Volume"].str.replace(',', '').str.replace('-', ''), errors='coerce')
 
     netflix_data = netflix_data.dropna(subset=["Date"])  
-    netflix_data.to_excel("C:/Users/Lenovo/Documents/GitHub/portfolio/Netflix-Stock-Data-Viewer/netflix_data.xlsx", index=False)
+    netflix_data.to_excel("../Netflix-Stock-Data/data/netflix_data.xlsx", index=False)
     return netflix_data
 
 @app.route("/")
