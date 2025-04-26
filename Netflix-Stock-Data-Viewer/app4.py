@@ -5,12 +5,14 @@ from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
 import io
 import base64
-
+import yfinance as yf
 app = Flask(__name__)
 
 # Web scraping function
 def scrape_netflix_data():
-    url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0220EN-SkillsNetwork/labs/project/netflix_data_webpage.html"
+    #url = "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0220EN-SkillsNetwork/labs/project/netflix_data_webpage.html"
+    url="https://finance.yahoo.com/quote/NFLX/history/"
+    #url="C:/Users/Lenovo/Documents/GitHub/portfolio/Netflix-Stock-Data-Viewer/Netflix_Yahoo_Finance.html"
     data = requests.get(url).text
     soup = BeautifulSoup(data, 'html.parser')
 
