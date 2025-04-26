@@ -3,8 +3,6 @@
 ## 📌 Project Overview
 This project addresses the **Split Delivery Vehicle Routing Problem (SD-VRP)**, an advanced variant of the classic Capacitated Vehicle Routing Problem (CVRP). Unlike CVRP, SD-VRP allows multiple vehicles to serve a single customer, optimizing logistics for scenarios where demand exceeds vehicle capacity.
 
-![SD-VRP Visualization](https://via.placeholder.com/400x200?text=SD-VRP+Routes+Example)
-
 ## 🎯 Objectives
 - Minimize total transportation costs while respecting vehicle capacity constraints
 - Fully satisfy customer demands through split deliveries when necessary
