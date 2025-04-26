@@ -38,26 +38,26 @@ Later, this dataset can be **used to train Machine Learning models** for stock p
 
 # 🚀 Quick Start
 
-git clone https://github.com/your-username/netflix-stock-ml.git|
-cd netflix-stock-ml|
+git clone https://github.com/your-username/netflix-stock-ml.git   
+cd netflix-stock-ml  
 
 
 # 📊 Features
 ____________________________________________________________________
-✅ Scrape latest Netflix historical stock data
-✅ Save data automatically to netflix_data.xlsx
-✅ Generate a Closing Price vs. Date plot
-✅ Prepare clean dataset for ML training (future project)
-✅ Fully Dockerized for easy deployment 🚀
+✅ Scrape latest Netflix historical stock data  
+✅ Save data automatically to netflix_data.xlsx  
+✅ Generate a Closing Price vs. Date plot  
+✅ Prepare clean dataset for ML training (future project)  
+✅ Fully Dockerized for easy deployment 🚀  
 
 
 
 # ✨ Future Improvements
 _____________________________________________________________________
-📈 Train Machine Learning models (Random Forest, LSTM) on the stock data
-📊 Build an interactive dashboard using Plotly Dash or Streamlit
-📦 Add database storage (Postgres, MongoDB) for historical data
-🔐 Secure endpoints (authentication)
-🌎 Deploy online using Render or AWS Lightsail
+📈 Train Machine Learning models (Random Forest, LSTM) on the stock data  
+📊 Build an interactive dashboard using Plotly Dash or Streamlit  
+📦 Add database storage (Postgres, MongoDB) for historical data  
+🔐 Secure endpoints (authentication)  
+🌎 Deploy online using Render or AWS Lightsail  
 
 
