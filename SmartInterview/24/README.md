@@ -49,13 +49,13 @@
 
 ## 🧑‍💻 Development Team
 
-| Member                  | Role               | 
-|-------------------------|--------------------|
-| EL-GHARSI Imane         | Project Lead       | 
-| KHALFA Youssef          | Backend Dev        | 
-| EREKRAKEN Adnane        | Frontend Dev       | 
-| HODONOU Selonou Firmin  | Full Stack         | 
-| EN-NACIRI Youness       | AI Specialist      |  
+| Member                  |
+|-------------------------|
+| EL-GHARSI Imane         | 
+| KHALFA Youssef          | 
+| EREKRAKEN Adnane        | 
+| HODONOU Selonou Firmin  | 
+| EN-NACIRI Youness       | 
 
 **Supervisor:** Mme ZERHOUNI KAWTAR
 
