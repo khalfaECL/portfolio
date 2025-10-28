@@ -1,5 +1,0 @@
-Route 1: 0 - 2 (5) - 1 (4) - 0
-Route 2: 0 - 3 (6) - 0
-Total cost: 31
-Number of deliveries: 3
-Truck loads: 9 6
